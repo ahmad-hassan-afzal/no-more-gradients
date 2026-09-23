@@ -1,641 +1,97 @@
 ---
-name: production-quality-web-code
-description: Generate and modify production-quality web applications using deliberate architecture, domain-specific UX, restrained visual design, accessibility, responsive behavior, predictable state, realistic interaction states, performance, security, and maintainability. Use this skill whenever creating, modifying, reviewing, or refactoring a web application.
+name: no-more-gradients
+description: Produce and review web UI — landing pages, dashboards, app screens, forms, marketing copy — so it reads as deliberately designed software rather than generic AI output. Use this whenever building, styling, or reviewing front-end/UI code, choosing layouts, components, copy, or visual design for a web app, or whenever the user says something looks generic, templated, cookie-cutter, AI-generated, or "vibe coded" — even if they don't use those exact words. Not for pure backend/API/database work with no UI surface.
 ---
 
-# Production-Quality Web Code
+# No More Gradients
 
 ## Purpose
 
-Produce web applications that look and behave like deliberately designed software built by an experienced developer.
+Produce web UI that looks and behaves like it was deliberately designed by an experienced developer, not assembled from default component-library patterns.
 
-Do not optimize for appearing "human" or for defeating AI detectors. Eliminate the engineering and design characteristics that make generated work generic, repetitive, careless, artificial, or template-driven.
+This isn't about disguising AI authorship. A human-built site can show every pattern in `references/anti-patterns.md`, and an AI-built site can avoid all of them. The goal is to remove the *underlying causes* — undifferentiated content, decoration without purpose, template defaults applied without a reason — not to perform "humanness."
 
-The attached/reference material is a quality-control source, not a literal checklist to copy. It identifies clusters of signals commonly associated with low-quality or heavily AI-assisted websites. The source explicitly states that none of those signals proves AI authorship; human-designed sites can contain them and AI-generated sites can avoid them. Treat clusters of independent signals as quality warnings, not authorship evidence.
+## The core test
 
-## Operating Rule
+Almost everything that makes UI look generic reduces to one question, asked of every claim, visual effect, and interaction: **would this same thing appear unchanged on a competing product?** If a headline, a gradient, a card layout, or a button label would fit almost anything else, it hasn't actually been decided for *this* product yet — decide it.
+
+`references/anti-patterns.md` catalogs the recurring, recognizable shapes this failure takes (A–N: copy, typography, layout, page-type discipline, interactions, forms, data presentation, responsive behavior, accessibility, state handling, code architecture, naming, dependencies, visual-system consistency). Read it before implementing or reviewing UI work. It's illustrative, not an exhaustive blocklist — something not named there can still fail the core test above, and something on the list can be the right call when there's a concrete reason for it.
+
+## Operating rule
 
 Before writing or changing code:
 
-1. Read the user requirements.
-2. Inspect the existing project and architecture.
-3. Inspect the supplied reference material when available.
-4. Identify the application's actual users, workflow, information density, and primary task.
-5. Model the required pages, components, data, state, interactions, validation, API boundaries, and responsive behavior.
-6. Implement the smallest coherent architecture that supports the real requirements.
-7. Review the result against the anti-vibe-code quality model below.
-8. Refine before returning the implementation.
+1. Read the user's actual requirements and inspect the existing project and architecture.
+2. Identify the real users, workflow, information density, and primary task — not a generic template for "a web app."
+3. Model only the pages, components, data, state, and interactions the requirements actually call for.
+4. Implement the smallest coherent architecture that supports that.
+5. Review against `references/anti-patterns.md` and the Security/Testing sections below.
+6. Refine before returning the result.
 
-Never mechanically reproduce the structure of a reference website or this document.
+Never mechanically reproduce the structure of a reference site — or of this skill's own document.
 
----
+## Design decisions to make explicitly
 
-# 1. Quality Model Derived From the Reference
+Decide these rather than defaulting to whatever a component library ships with:
 
-The reference contains 1,000 numbered indicators. Most of the latter indicators deliberately repeat the same core patterns in different contexts: landing page, pricing, dashboard, and settings. Consolidate those repetitions into these review dimensions.
+- Primary user goal, and what's primary vs. secondary content or actions
+- Navigation hierarchy and information density
+- Responsive behavior at desktop, tablet, and mobile — not just "does it fit"
+- Data/state boundaries and failure/recovery paths
 
-## A. Domain-specific content
+A gradient, hero section, three-column grid, or pill button chosen without a concrete reason tied to these answers is a default, not a decision. See `references/anti-patterns.md` sections B, C, and N for the recognizable shapes this takes.
 
-Reject:
+## Page-type discipline
 
-- Generic hero copy that says little about the actual product.
-- SaaS filler such as "seamless", "powerful", "effortless", "next-generation", "cutting-edge", "transform", "unlock", "elevate", "streamline", "empower", "revolutionize", "innovative", "intuitive", "smart", "intelligent", "robust", "scalable", "secure", "modern", "simple", "flexible", "reliable", "optimized", "frictionless", "personalized", or "built for the future" when those words are not backed by concrete behavior or evidence.
-- Claims that could describe almost any SaaS product.
-- Feature descriptions dominated by adjectives instead of specifications.
-- Polished prose with little domain information.
-- Repetitive marketing constructions such as:
-  - "everything you need to..."
-  - "all in one place"
-  - "at scale"
-  - "in today's fast-paced world"
-  - "say goodbye to..."
-  - "meet the future of..."
-  - "take X to the next level"
-  - repeated "from X to Y"
-  - repeated "whether X or Y"
-  - repeated "not just X, but Y"
-  - repeated "more than X"
-  - repeated "designed for X, built for Y"
+A landing page, a dashboard, a settings screen, and an error page have different jobs. Don't impose one template's structure — hero section, marketing copy, decorative cards — on a route that isn't that job. See `references/anti-patterns.md` section D.
 
-Use terminology that belongs to the actual product and workflow. If real copy is unavailable, use realistic neutral domain language rather than invented marketing claims.
+## Security
 
-## B. Typography and information hierarchy
+Production-quality includes security, not just appearance. At minimum, check for:
 
-Avoid:
+- Input validation and sanitization on every form and API boundary — server-side, not just in the UI
+- Authentication and authorization on every route/endpoint that needs it; a hidden button is not a security boundary
+- XSS: never inject unsanitized user content into the DOM (`dangerouslySetInnerHTML` and equivalents are a red flag, not a default)
+- CSRF protection on state-changing requests
+- Secrets (API keys, tokens, credentials) never hardcoded or shipped to the client
+- Dependencies pulled from trusted sources only, nothing unnecessary added
+- Cookies/sessions set with `HttpOnly`, `Secure`, and an appropriate `SameSite`
+- Rate limiting on auth and other abuse-prone endpoints
 
-- Uniform Title Case when sentence case is more natural.
-- Headings with suspiciously similar lengths or grammar.
-- Repeated abstract nouns where concrete actions or domain nouns would be clearer.
-- Repeated "Discover", "Unlock", "Transform", "Power", "Smart", "Simple", "Better", "Future", "Seamless", or "Intelligent".
-- Rhetorical questions that serve no purpose.
-- Repeated em-dash or colon-based heading constructions.
-- Headings optimized for marketing rather than navigation.
-- Headings that introduce concepts not represented in the UI.
-- Unexplained acronyms.
-- Excessive adjectives.
-- Excessive direct-address language such as repeated "you" or "your".
-- Promises of speed, clarity, control, visibility, growth, or efficiency without corresponding evidence or controls.
-- Motivational/pitch-deck language in functional or technical screens.
+Flag these gaps even when the user didn't ask about security — a login form with no rate limiting is still incomplete.
 
-Define a deliberate typography system:
+## Testing
 
-- Font family
-- Body size
-- Heading scale
-- Line heights
-- Weight scale
-- Text and muted colors
-- Letter spacing only where useful
+Don't claim something works without a way to verify it:
 
-Use hierarchy to improve scanning, not to imitate a modern SaaS aesthetic.
+- Cover the critical user flows (the primary actions identified above), not incidental ones
+- Test validation and error states, not just the happy path
+- For every visible interaction (button, form, toggle, tab), confirm the underlying behavior actually exists — never leave a control implying an action that isn't implemented
+- Match test effort to actual complexity: a static marketing page doesn't need checkout-flow-level coverage
 
-## C. Layout and visual composition
+## Examples
 
-Avoid template symmetry and decoration without purpose:
+The same "would this fit any other product?" fix applies to copy, labels, and visual choices alike:
 
-- Every section centered.
-- Predictable alternating text/image sections.
-- Identical section spacing regardless of content.
-- Identical card heights for unrelated content.
-- Three-column cards used by default.
-- Excessive empty space around short copy.
-- Suspiciously uniform content widths across unrelated screens.
-- Every block wrapped in a container.
-- Identical rounded containers everywhere.
-- Identical corner radii everywhere.
-- Every button rendered as a pill.
-- Identical shadows on every card.
-- Identical borders on every section.
-- Long pages composed of repeated centered blocks.
-- Oversized text carrying the entire visual hierarchy.
-- Repeated decorative gradients.
-- Background blobs that merely fill empty space.
-- Floating cards without functional purpose.
-- Repeated circles/blobs at mathematically similar positions.
+- Generic: "Streamline your workflow, all in one place." → Specific: "Sync your GitHub issues and Linear tickets into one queue, sorted by SLA breach time."
+- Generic: a button labeled "Get Started" → Specific: a button labeled "Create your first project" (the actual next action)
+- Generic: every card gets the same drop shadow and radius because the component library defaults to it → Specific: shadow/radius applied only where it signals something (e.g., an elevated or draggable card), flat elsewhere
 
-Layout must follow content and workflow. Asymmetry is valid when it improves information hierarchy.
+## Review checklist
 
-## D. Page-type discipline
+Before returning implementation-ready code, confirm:
 
-Do not impose a landing-page template on every route.
+- **Architecture** — structure matches actual complexity; no wrapper components or service layers without a concrete need
+- **Copy & visual system** — passes the core test above; design tokens (color, spacing, radius, type) are centralized and applied consistently, not ad hoc
+- **Interactions** — every visible control has real, working behavior
+- **Accessibility** — semantic HTML, keyboard operation, visible focus states, sufficient contrast, labeled forms
+- **Responsive behavior** — desktop, tablet, and mobile were each intentionally composed, not mechanically collapsed
+- **State & failure handling** — loading, empty, error, and partial-data states exist where applicable; errors explain the actual problem, not "something went wrong"
+- **Security & testing** — per the sections above
+- **Code quality** — meaningful names, no dead code, no magic values, comments explain *why*, not *what*
 
-Avoid:
+If any answer is negative, refine before completion — don't add new decoration to compensate.
 
-- Hero sections on transactional pages.
-- Marketing introductions before functional content.
-- Dashboard pages containing marketing-style heroes.
-- Settings pages represented as decorative cards instead of compact controls.
-- Forms presented as oversized marketing cards.
-- Tables surrounded by unnecessary padding.
-- Filters scattered across unrelated rows.
-- Oversized modal layouts for simple actions.
-- Large illustrations for trivial empty states.
-- Error pages containing motivational copy.
-- Loading screens containing slogans.
-- Generic footers generated from an imaginary sitemap.
+## Output standard
 
-Use the page type to determine density, hierarchy, navigation, and interaction patterns.
-
-## E. Interaction and content semantics
-
-Reject fake or ambiguous interactions:
-
-- Vague button labels such as "Get Started" when the real action is known.
-- Primary and secondary actions with indistinguishable visual priority.
-- Icons where text is clearer.
-- Icon-plus-tooltip for every action.
-- Tooltips explaining labels that should already be understandable.
-- Duplicate links and buttons inside the same card.
-- Multiple competing calls to action.
-- Generic dropdown placeholder values.
-- Marketing-style checkbox labels.
-- Toggle labels that describe both states positively.
-- Copy/share/bookmark controls without a meaningful use case.
-- Breadcrumbs where hierarchy is already obvious.
-- Tabs for content that fits on one screen.
-- Generic "Overview / Details / Activity" tabs reused without domain justification.
-- Accordions hiding short or frequently needed content.
-- Hover effects on non-interactive table rows.
-- Buttons or controls that visually imply behavior that is not implemented.
-
-Every visible interaction must have an intentional, working behavior.
-
-## F. Forms
-
-Forms are production interfaces, not decorative compositions.
-
-Use:
-
-- Persistent labels.
-- Correct input types.
-- Useful defaults.
-- Validation tied to actual rules.
-- Specific error messages.
-- Clear disabled and submitting states.
-- Keyboard operation.
-- Appropriate focus behavior.
-- Clear success feedback.
-- Explicit consequences for destructive operations.
-
-Avoid:
-
-- Placeholder text as the only label.
-- Artificially conversational validation.
-- Fake sample data presented as realistic input guidance.
-- Ambiguous natural-language date placeholders.
-- Long sentence-like button labels.
-- Inconsistent capitalization.
-- Generic confirmation text that does not explain consequences.
-
-## G. Data presentation
-
-For lists, tables, metrics, charts, search, filters, sorting, and pagination:
-
-- Match density to the domain.
-- Define search scope.
-- Use filters that belong to the dataset.
-- Use terminology consistently.
-- Expose meaningful sort options.
-- Provide totals when they matter.
-- Preserve access to truncated data.
-- Define metric denominators when showing percentages.
-- Use chart precision appropriate to the data.
-- Do not add legends when a single or tiny number of series makes them redundant.
-- Do not add metric icons merely because a card has space.
-- Use hover states only when interaction exists.
-- Do not automatically create skeleton and empty states for tiny local datasets.
-
-Do not manufacture dashboard complexity.
-
-## H. Responsive behavior
-
-Responsive design is structural, not a final CSS patch.
-
-Design intentionally for:
-
-- Desktop
-- Tablet
-- Mobile
-
-Avoid:
-
-- Desktop layouts merely stacked vertically.
-- Mechanical grid collapse.
-- Sidebars simply becoming long blocks below content.
-- Navigation wrapping awkwardly at intermediate widths.
-- All buttons becoming full-width without need.
-- Cards becoming excessively tall.
-- Desktop spacing merely being reduced.
-- Desktop image aspect ratios being retained when unsuitable.
-- Decorative elements overlapping content at breakpoints.
-
-At each breakpoint, reconsider information priority, navigation, controls, tables, forms, dialogs, and content order.
-
-## I. Accessibility
-
-Use semantic HTML first.
-
-Required where applicable:
-
-- Correct landmarks.
-- Correct heading hierarchy.
-- Real buttons for actions.
-- Real links for navigation.
-- Persistent labels.
-- Keyboard navigation.
-- Visible focus states.
-- Appropriate target sizes.
-- Sufficient contrast.
-- Meaningful alternative text.
-- Accessible validation and error messaging.
-- ARIA only when native semantics are insufficient.
-
-Do not use ARIA to compensate for incorrect HTML.
-
-## J. State and failure behavior
-
-Separate:
-
-- UI state
-- Application state
-- Derived state
-- Persistent state
-- Server/API state
-
-Rules:
-
-- Do not store derivable values as independent state.
-- Do not duplicate a source of truth.
-- Keep local concerns local.
-- Do not introduce global state merely for convenience.
-- Do not add effects where derivation or event handling is sufficient.
-
-Handle applicable states:
-
-- Loading
-- Empty
-- Success
-- Error
-- Partial data
-- Invalid input
-- Network failure
-- Authentication failure
-- Authorization failure
-- Server failure
-- Missing data
-- Invalid application state
-
-Errors must explain the actual problem and the available recovery path. Avoid universal "Something went wrong" messages.
-
-## K. Code architecture
-
-Use components and modules for real concepts, not arbitrary chunks of markup.
-
-Good abstraction:
-
-- Removes meaningful duplication.
-- Encapsulates a real domain or UI concept.
-- Establishes reusable behavior.
-- Makes the code easier to understand or change.
-
-Bad abstraction:
-
-- Exists only because a block of JSX/HTML was extracted.
-- Adds a wrapper with no semantic responsibility.
-- Creates generic utilities for one call site.
-- Creates a service layer without an architectural need.
-- Introduces hooks solely to hide straightforward logic.
-
-Avoid both extremes:
-
-### Fake complexity
-Do not add:
-
-- Excessive folders.
-- Large configuration systems.
-- Unnecessary design systems.
-- State-management libraries without a state-management problem.
-- Service/repository layers without meaningful boundaries.
-- Custom hooks for trivial logic.
-- Giant utility modules.
-- Large dependency sets.
-
-### Fake simplicity
-Do not put a genuinely complex application into:
-
-- One enormous component.
-- One giant JavaScript file.
-- One giant stylesheet.
-- One HTML file containing unrelated concerns.
-
-Architecture must follow actual complexity.
-
-## L. Naming, comments, and maintainability
-
-Use meaningful names based on domain concepts.
-
-Avoid:
-
-- Generic names that hide intent.
-- Inconsistent terminology for the same concept.
-- Dead code.
-- Unused imports.
-- Unused props.
-- Magic values without explanation or configuration.
-- Deeply nested conditionals.
-- Generated boilerplate that serves no purpose.
-- Comments that restate the code.
-
-Comments should explain why something exists when the reason is not apparent from the implementation.
-
-## M. Dependencies and performance
-
-Choose the smallest implementation that satisfies the requirements.
-
-Avoid:
-
-- Libraries for trivial functionality.
-- Large dependencies for small features.
-- Unnecessary client-side JavaScript.
-- Unnecessary re-renders.
-- Unnecessary effects.
-- Repeated network requests.
-- Unnecessary animations.
-- Duplicate data fetching.
-- Heavy abstractions around simple APIs.
-
-Do not optimize prematurely, but do remove obvious unnecessary work.
-
-## N. Visual-system consistency
-
-Treat the application as one product.
-
-Centralize design tokens for:
-
-- Primary color
-- Accent/secondary color
-- Backgrounds
-- Surfaces
-- Borders
-- Text
-- Muted text
-- Success
-- Warning
-- Error
-- Spacing
-- Radius
-- Control heights
-- Typography
-
-Do not introduce ad-hoc values throughout components.
-
-Consistency does not mean every element must look identical. Shared tokens should establish a visual language while hierarchy determines variation.
-
----
-
-# 2. Design Rules
-
-Before implementation, explicitly determine:
-
-1. Primary user goal.
-2. Primary content.
-3. Secondary content.
-4. Primary actions.
-5. Supporting actions.
-6. Navigation hierarchy.
-7. Information density.
-8. Responsive behavior.
-9. Data and state boundaries.
-10. Failure and recovery paths.
-
-Then choose the UI structure.
-
-Do not automatically use:
-
-- Gradients.
-- Glassmorphism.
-- Huge rounded corners.
-- Floating cards.
-- Heavy shadows.
-- Decorative blobs.
-- Excessive animations.
-- Oversized headings.
-- Generic dashboard layouts.
-- Hero sections.
-- Pills/badges everywhere.
-- Three-column card grids.
-- Excessive whitespace.
-- Random accent colors.
-
-Any such pattern requires a concrete product or interaction reason.
-
----
-
-# 3. Implementation Workflow
-
-## Phase 1 — Understand
-
-Read:
-
-- User requirements.
-- Existing code.
-- Existing architecture.
-- Existing dependencies.
-- Supplied reference material.
-- Existing domain terminology.
-
-Do not start by generating a page template.
-
-## Phase 2 — Model
-
-Define only what the application actually needs:
-
-- Routes/pages.
-- Components.
-- Data structures.
-- State ownership.
-- User flows.
-- API boundaries.
-- Validation.
-- Error states.
-- Responsive transformations.
-- Accessibility requirements.
-
-Prefer explicit decisions over speculative infrastructure.
-
-## Phase 3 — Implement
-
-Build the smallest coherent implementation.
-
-Rules:
-
-- Reuse working infrastructure.
-- Preserve established conventions unless they create a concrete problem.
-- Do not rewrite unrelated code.
-- Keep responsibilities clear.
-- Use domain terminology.
-- Make all visible interactions functional.
-- Keep styling decisions consistent with the design tokens.
-
-## Phase 4 — Review
-
-Review the implementation as a pull request from an experienced developer.
-
-Look specifically for:
-
-- Generic copy.
-- Template-derived sections.
-- Decorative effects without purpose.
-- Repetition.
-- Arbitrary spacing.
-- Inconsistent typography.
-- Inconsistent controls.
-- Fake interactions.
-- Unnecessary state.
-- Unnecessary effects.
-- Unnecessary abstractions.
-- Dead code.
-- Magic values.
-- Accessibility failures.
-- Mobile failures.
-- Weak error states.
-- Unnecessary dependencies.
-- Incorrect page density.
-
-## Phase 5 — Refine
-
-Fix identified problems rather than adding new visual decoration.
-
-Prefer removing complexity over disguising it.
-
-## Phase 6 — Verify
-
-Before completion, verify:
-
-### Architecture
-- Structure matches actual application complexity.
-- Responsibilities are separated appropriately.
-- Abstractions have concrete value.
-
-### UI
-- Visual system is coherent.
-- Effects are justified.
-- Layout follows content and workflow.
-- Page types are treated differently when their jobs differ.
-
-### UX
-- Interactions behave realistically.
-- Primary actions are obvious.
-- Loading, empty, error, success, and partial states are handled where applicable.
-
-### Code
-- Names are meaningful.
-- Duplication is controlled.
-- Dead code is absent.
-- Dependencies are justified.
-- Comments explain non-obvious reasons rather than syntax.
-
-### Accessibility
-- Semantic HTML is correct.
-- Keyboard interaction works.
-- Focus is visible.
-- Forms are labeled.
-- Errors are accessible.
-- Contrast is sufficient.
-
-### Responsive behavior
-- Desktop, tablet, and mobile layouts are intentionally composed.
-- Content priority changes where necessary.
-- Tables, navigation, forms, and dialogs remain usable.
-
-### Maintainability
-- Another experienced developer can understand the implementation quickly.
-- Major implementation decisions have concrete reasons.
-
-If a review answer is negative, refine the implementation before completion.
-
----
-
-# 4. Special Review Heuristics
-
-## Detect repeated structure
-
-Do not mistake repeated domain concepts for bad repetition.
-
-Bad repetition:
-- Five unrelated sections all use identical cards because a template was convenient.
-
-Good repetition:
-- Five records use the same row component because they represent the same domain entity.
-
-## Detect decorative intent
-
-Ask of every visual effect:
-
-- Does it communicate hierarchy?
-- Does it identify state?
-- Does it improve navigation?
-- Does it support the brand or domain?
-- Does it improve interaction feedback?
-
-If none applies, remove it.
-
-## Detect generated-looking copy
-
-Replace generic claims with:
-
-- Actual object names.
-- Actual workflow steps.
-- Actual limits.
-- Actual statuses.
-- Actual metrics.
-- Actual consequences.
-- Actual user actions.
-
-## Detect fake functionality
-
-For every button, link, toggle, tab, dropdown, modal, search field, filter, sort control, or navigation item:
-
-- Identify the resulting state change.
-- Identify the underlying action.
-- Ensure the UI communicates failure when the action cannot complete.
-
-Remove controls that have no real purpose.
-
-## Detect over-engineering
-
-Before adding a library, abstraction, hook, state store, service, configuration layer, or utility:
-
-- Identify the concrete problem it solves.
-- Confirm the problem cannot be solved more simply.
-- Confirm the added boundary improves maintainability.
-
-If not, do not add it.
-
-## Detect under-engineering
-
-If unrelated responsibilities are mixed together and the application is becoming difficult to change, separate them according to actual domain or technical boundaries.
-
----
-
-# 5. Output Standard
-
-When generating code, return implementation-ready code rather than a design manifesto.
-
-When modifying existing code:
-
-- Preserve working behavior unless the requirement changes it.
-- Explain meaningful architectural changes briefly.
-- Do not claim a feature is implemented unless the code actually implements it.
-- Do not invent APIs, data, integrations, or capabilities.
-- Do not leave visible placeholder interactions unless explicitly requested.
-
-When reviewing code, identify concrete violations and their locations, then provide corrected implementation where appropriate.
-
-# Core Rule
-
-Do not attempt to make code "look human."
-
-Write code that is genuinely well-designed, appropriately architected, domain-specific, maintainable, accessible, responsive, performant, secure, and technically deliberate.
-
-The desired result should naturally avoid the common characteristics of generic or low-quality AI-generated implementations because those characteristics have been removed at the engineering level.
+Return implementation-ready code, not a design manifesto. Don't claim a feature is implemented unless the code implements it; don't invent APIs, data, or capabilities; don't leave visible placeholder interactions unless explicitly requested. When reviewing existing code, cite concrete violations and their locations before proposing fixes.
