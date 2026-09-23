@@ -195,6 +195,4 @@ Especially if you have ever looked at an AI-generated website and thought:
 
 ## Topics:
 
-vibe-coding, vibe-coded-website, ai-generated-ui, ai-generated-websites, ai-slop, ai-slop-ui, frontend-design, frontend-development, web-design, ui-design, claude-code, cursor, lovable, bolt
-v0
-````
+vibe-coding, vibe-coded-website, ai-generated-ui, ai-generated-websites, ai-slop, ai-slop-ui, frontend-design, frontend-development, web-design, ui-design, claude-code, cursor, lovable, bolt, v0
