@@ -468,21 +468,7 @@ Especially if you have ever looked at an AI-generated website and thought:
 
 `vibe coding` · `vibe coded website` · `AI-generated website` · `AI-generated UI` · `AI slop` · `AI slop UI` · `generic website` · `generic AI website` · `AI web design` · `AI frontend` · `Claude Code` · `Cursor` · `Lovable` · `Bolt` · `v0` · `frontend design` · `web UI` · `UI design` · `frontend development`
 
----
-
-## License
-
-See [LICENSE](LICENSE).
-
 ````
-
-### Recommended GitHub repository metadata
-
-The README alone is not enough. GitHub specifically supports repository topics for discoverability, and its own documentation recommends using topics that describe the repository's purpose and subject area.
-
-**Repository description:**
-
-> Claude skill for fixing generic, AI-generated and vibe-coded websites. Remove AI-slop UI patterns and build product-specific web interfaces.
 
 **Topics:**
 
@@ -503,13 +489,3 @@ lovable
 bolt
 v0
 ````
-
-GitHub currently allows up to 20 repository topics, with lowercase letters, numbers, and hyphens.
-
-### One important SEO change
-
-I would **not** repeatedly stuff "AI slop" into the README just to rank for it. The current search landscape already uses that terminology heavily, but your strongest differentiator is broader: **fixing the underlying genericness rather than merely banning a recognizable visual style**. That is directly supported by your skill's core principle and anti-pattern coverage.
-
-The README therefore targets the search terms naturally while establishing a more defensible concept:
-
-**"Make vibe-coded websites less generic by forcing product-specific design decisions."**
